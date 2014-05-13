@@ -20,9 +20,10 @@ class CSRFMiddleware(Middleware):
     def set_up(self):
         CSRF_TOKEN_COOKIE = 'XSRF-RANDOM'
         CSRF_ANGULAR_COOKIE = 'XSRF-TOKEN'
+        CSRF_ANGULAR_AJAX_HEADER = 'X-XSRF-TOKEN'
         csrf_code = facade.retrive_cookie_data(self.handler.request, CSRF_TOKEN_COOKIE).execute().result
         if csrf_code:
-            angular_cookie_value = self.handler.request.cookies.get(CSRF_ANGULAR_COOKIE)
+            angular_cookie_value = self.handler.request.headers.get(CSRF_ANGULAR_AJAX_HEADER)
             if csrf_code == angular_cookie_value:
                 return False
             form_input = self.dependencies.get(CSRF_CODE_KEY)

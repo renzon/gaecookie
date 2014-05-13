@@ -66,14 +66,8 @@ class MiddlewareTests(GAETestCase):
         csrf_code = 'abc'
         token = facade.sign('XSRF-RANDOM', csrf_code).execute().result
 
-        def get_cookie(name):
-            if name == 'XSRF-RANDOM':
-                return token
-            elif name == 'XSRF-TOKEN':
-                return csrf_code
-
-        handler.request.cookies.get = get_cookie
-
+        handler.request.cookies.get = lambda k: token
+        handler.request.headers.get=lambda  k: csrf_code
         def secure():
             pass
 
@@ -99,7 +93,7 @@ class MiddlewareTests(GAETestCase):
         dependencies = {'_fcn': secure}
         request_args = {'_csrf_code': csrf_code}
         # removes _csrf_code from request_args to dependencies
-        CSRFInputToDependency(handler,dependencies,request_args).set_up()
+        CSRFInputToDependency(handler, dependencies, request_args).set_up()
         csrf_middleware = CSRFMiddleware(handler, dependencies, request_args)
         self.assertFalse(csrf_middleware.set_up())
         self.assertDictEqual({}, request_args, '_csrf_code must be removed from request_args')
