@@ -104,7 +104,8 @@ def find_package_data(
 
 
 PACKAGE = "gaecookie"
-DESCRIPTION = "A library for signing string and validating cookies"
+DESCRIPTION = "A library for signing string and validating cookies. cd .." \
+              ""
 NAME = "gaecookie"
 AUTHOR = "Renzo Nuccitelli"
 AUTHOR_EMAIL = "renzo.n@gmail.com"

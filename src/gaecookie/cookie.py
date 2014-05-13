@@ -20,7 +20,7 @@ class WriteCookie(SignCmd):
     def do_business(self, stop_on_error=False):
         super(WriteCookie, self).do_business(stop_on_error)
         if self.result:
-            self.response.set_cookie(self.name, self.result, httponly=True)
+            self.response.set_cookie(self.name, self.result, httponly=True, overwrite=True)
 
 
 class RetrieveCookieData(RetrieveCmd):
