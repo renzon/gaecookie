@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 from gaecookie import facade
-from gaecookie.csrf import is_csrf_secure
+from gaecookie.decorator import is_csrf_secure
 from os import urandom
 from tekton.gae.middleware import Middleware
 

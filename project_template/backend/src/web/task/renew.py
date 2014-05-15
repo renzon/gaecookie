@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 from gaecookie import facade
-from gaecookie.csrf import no_csrf
+from gaecookie.decorator import no_csrf
 
 
 @no_csrf

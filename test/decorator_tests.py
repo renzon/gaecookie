@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import unittest
 from base import GAETestCase
 from gaecookie import facade
-from gaecookie.csrf import is_csrf_secure, no_csrf
+from gaecookie.decorator import is_csrf_secure, no_csrf
 from gaecookie.middleware import CSRFMiddleware, CSRFInputToDependency
 from mock import Mock
 
