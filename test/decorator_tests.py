@@ -35,6 +35,7 @@ class MiddlewareTests(GAETestCase):
 
     def test_first_access_unsecure_handler(self):
         handler = Mock()
+        handler.request.method = 'GET'
         handler.request.cookies.get = Mock(return_value=None)
 
         @no_csrf
@@ -46,6 +47,30 @@ class MiddlewareTests(GAETestCase):
         csrf_middleware = CSRFMiddleware(handler, dependencies, request_args)
         self.assertFalse(csrf_middleware.set_up())
         self.assert_csrf_setup(dependencies, handler)
+
+    def test_http_get_no_working_on_secure(self):
+        handler = Mock()
+        handler.request.method = 'GET'
+
+        # Making a perfect valid call but the http method GET
+        csrf_code = 'abc'
+        token = facade.sign('XSRF-RANDOM', csrf_code).execute().result
+
+        def get_cookie(name):
+            if name == 'XSRF-RANDOM':
+                return token
+
+        handler.request.cookies.get = get_cookie
+
+        def secure():
+            pass
+
+        dependencies = {'_fcn': secure}
+        request_args = {'_csrf_code': csrf_code}
+        # removes _csrf_code from request_args to dependencies
+        CSRFInputToDependency(handler, dependencies, request_args).set_up()
+        csrf_middleware = CSRFMiddleware(handler, dependencies, request_args)
+        self.assertTrue(csrf_middleware.set_up(), 'should be false because the http method is GET')
 
 
     def test_first_access_secure_handler(self):
@@ -67,7 +92,8 @@ class MiddlewareTests(GAETestCase):
         token = facade.sign('XSRF-RANDOM', csrf_code).execute().result
 
         handler.request.cookies.get = lambda k: token
-        handler.request.headers.get=lambda  k: csrf_code
+        handler.request.headers.get = lambda k: csrf_code
+
         def secure():
             pass
 

@@ -23,12 +23,13 @@ class CSRFMiddleware(Middleware):
         CSRF_ANGULAR_AJAX_HEADER = 'X-XSRF-TOKEN'
         csrf_code = facade.retrive_cookie_data(self.handler.request, CSRF_TOKEN_COOKIE).execute().result
         if csrf_code:
-            angular_cookie_value = self.handler.request.headers.get(CSRF_ANGULAR_AJAX_HEADER)
-            if csrf_code == angular_cookie_value:
-                return False
-            form_input = self.dependencies.get(CSRF_CODE_KEY)
-            if csrf_code == form_input:
-                return False
+            if self.handler.request.method != 'GET':
+                angular_cookie_value = self.handler.request.headers.get(CSRF_ANGULAR_AJAX_HEADER)
+                if csrf_code == angular_cookie_value:
+                    return False
+                form_input = self.dependencies.get(CSRF_CODE_KEY)
+                if csrf_code == form_input:
+                    return False
         else:
             csrf_code = urandom(16).encode('hex')
             facade.write_cookie(self.handler.response, CSRF_TOKEN_COOKIE, csrf_code).execute()

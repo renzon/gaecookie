@@ -14,7 +14,7 @@
         function Controller($scope, $http) {
             $scope.result = ''
             $scope.ajax = function () {
-                $http.get('{{ ajax_path}}').success(function (data) {
+                $http.post('{{ ajax_path}}').success(function (data) {
                     $scope.result = data;
                 });
             }
@@ -32,13 +32,13 @@
         Ajax Resulg: {_ result _}
     </div>
     <h1>Secure Form</h1>
-    <form action="{{ form_url }}">
+    <form action="{{ form_url }}" method="post">
         {{ csrf_input() }}
         Type your name <input type="text" name="name"/>
         <button type="submit">Send</button>
     </form>
     <h1>Unsecure Form</h1>
-    <form action="{{ form_url }}">
+    <form action="{{ form_url }}" method="post">
         Type your name <input type="text" name="name"/>
         <button type="submit">Send</button>
     </form>
