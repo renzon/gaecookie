@@ -5,8 +5,11 @@ from gaecookie.security import SignCmd, RetrieveCmd
 
 
 class DeleteCookie(Command):
-    def __init__(self, response, cookie_name, **kwargs):
-        super(DeleteCookie, self).__init__(response=response, cookie_name=cookie_name, **kwargs)
+    def __init__(self, response, cookie_name):
+        super(DeleteCookie, self).__init__()
+        self.cookie_name = cookie_name
+        self.response = response
+
 
     def do_business(self, stop_on_error=True):
         self.response.delete_cookie(self.cookie_name)
