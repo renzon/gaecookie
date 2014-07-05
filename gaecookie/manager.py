@@ -2,7 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 from google.appengine.api import memcache
 from os import urandom
-from gaebusiness.business import Command, CommandList
+from gaebusiness.business import Command, CommandParallel
 from gaecookie.model import SignSecret
 
 _SIGN_CACHE_KEY = SignSecret.__name__
@@ -22,7 +22,7 @@ class FindOrCreateSecrets(Command):
         try:
             self.result = memcache.get(_SIGN_CACHE_KEY)
         except Exception:
-            pass # If memcache fails, do nothing
+            pass  # If memcache fails, do nothing
         if self.result is None:
             self._future = SignSecret.find_last().fetch_async(2)
 
@@ -42,10 +42,10 @@ class FindOrCreateSecrets(Command):
         return self._to_commit
 
 
-class RenewSecrets(CommandList):
+class RenewSecrets(CommandParallel):
     def __init__(self):
         self._find_secret = FindOrCreateSecrets()
-        super(RenewSecrets, self).__init__([self._find_secret])
+        super(RenewSecrets, self).__init__(self._find_secret)
 
 
     def commit(self):

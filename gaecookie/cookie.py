@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from gaebusiness.business import Command, CommandList
+from gaebusiness.business import Command
 from gaecookie.security import SignCmd, RetrieveCmd
 
 
