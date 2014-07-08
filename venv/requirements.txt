@@ -1,4 +1,4 @@
 gaebusiness==4.0
-gaegraph==2.3
+gaegraph==3.0
 tekton==3.1.1
 mock==1.0.1
